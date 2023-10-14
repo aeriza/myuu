@@ -5,18 +5,20 @@ import { exportVariable } from "npm:@actions/core@1.10.1";
 const args = parse(Deno.args);
 if (!("check-only" in args)) buildEnv(["$PUBLIC_KEY", "PROJECT"], true);
 
-/** Key yang diawali dengan `$` akan diganti dengan tipe environment*/
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
   const environment = (Deno.env.get("GH_REF") as string == Deno.env.get("GH_DEFAULT_BRANCH")) ? "PROD" : "PREVIEW";
   const env: { [K: string]: string } = {};
   
   for (const rawKey of keys) {
     const key = rawKey.startsWith("$") ? rawKey.replace("$", `${environment}_`) : rawKey;
+    console.log("key", key);
     const cleanedKey = rawKey.replace("$", "");
+    console.log("cleanedKey", cleanedKey);
     
     if (Deno.env.has(key)) {
       const value = Deno.env.get(key) as string;
-      env[cleanedKey] = value
+      console.log("value", value);
+      env[cleanedKey] = value;
       if (exportValue) exportVariable(cleanedKey, value);
     } else {
       console.warn(`Tidak ada env dengan key "${key}"`)
