@@ -1,5 +1,6 @@
 {
   "imports": {
-    "tweetnacl": "npm:tweetnacl@1.0.3"
+    "@discordjs/rest": "npm:@discordjs/rest@2.0.1",
+    "discord_api_types": "https://deno.land/x/discord_api_types@0.37.60/v10.ts"
   }
 }
