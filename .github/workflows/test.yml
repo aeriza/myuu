@@ -41,4 +41,4 @@ jobs:
       - name: Deploy to Deno Deploy
         run: |
           deno install --allow-net --allow-env --allow-read https://deno.land/x/deploy/deployctl.ts
-          deployctl deploy -p=$PROJECT --exclude=.github/,build.ts,LICENSE $ENTRYPOINT
+          deployctl deploy -p=$PROJECT --exclude=.github/,build.ts,LICENSE --prod $ENTRYPOINT
