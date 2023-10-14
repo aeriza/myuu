@@ -3,7 +3,12 @@ import { stringify } from "dotenv";
 import { exportVariable } from "npm:@actions/core@1.10.1";
 
 const args = parse(Deno.args);
-if (!("check-only" in args)) buildEnv(["$PUBLIC_KEY", "$PROJECT"], true);
+if (!("check-only" in args)) {
+  buildEnv(["$PROJECT"], true);
+
+  const deploymentEnv = buildEnv(["$PUBLIC_KEY", "$TOKEN"]);
+  await Deno.writeTextFile(".env", stringify(deploymentEnv));
+}
 
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
   const environment = (Deno.env.get("GH_REF")!.split("/").at(-1) == Deno.env.get("GH_DEFAULT_BRANCH")) ? "PROD" : "PREVIEW";
