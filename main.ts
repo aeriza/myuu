@@ -21,6 +21,8 @@ async function handler(request: Request): Promise<Response> {
   );
 }
 
+Deno.serve(handler);
+
 function hexToUint8Array(hex: string): Uint8Array {
   return new Uint8Array(
     hex.match(/.{1,2}/g)!.map((ctx) => parseInt(ctx, 16))
