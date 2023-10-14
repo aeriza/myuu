@@ -10,7 +10,7 @@ async function handler(request: Request): Promise<Response> {
   const body = await request.text();
   const valid = tweetnacl.sign.detached.verify(
     new TextEncoder().encode(timestamp + body),
-    hexToUint8Array(signature),
+    hexToUint8Array(signature as string),
     hexToUint8Array(Deno.env.get("PUBLIC_KEY") as string)
   );
 
