@@ -1,5 +1,8 @@
 import tweetnacl from "npm:tweetnacl@1.0.3";
+import { loadSync } from "dotenv";
 import { InteractionResponseType } from "discord_api_types";
+
+loadSync({ export: true });
 
 async function handler(request: Request): Promise<Response> {
   const invalidResponse = new Response("Invalid Request", { status: 401 });
