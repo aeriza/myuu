@@ -16,13 +16,10 @@ export function buildEnv(keys: string[], exportValue?: boolean): Record<string, 
   
   for (const rawKey of keys) {
     const key = rawKey.startsWith("$") ? rawKey.replace("$", `${environment}_`) : rawKey;
-    console.log("key", key);
     const cleanedKey = rawKey.replace("$", "");
-    console.log("cleanedKey", cleanedKey);
     
     if (Deno.env.has(key)) {
       const value = Deno.env.get(key) as string;
-      console.log("value", value);
       env[cleanedKey] = value;
       if (exportValue) exportVariable(cleanedKey, value);
     } else {
