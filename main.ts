@@ -6,7 +6,7 @@ async function handler(request: Request): Promise<Response> {
   const headers = ["X-Signature-Ed25519", "X-Signature-Timestamp"];
   if (request.method != "POST" && !headers.every(request.headers.has)) return invalidResponse;
     
-  const [signature, timestamp]: [string, string] = headers.map(request.headers.get);
+  const [signature, timestamp] = headers.map(request.headers.get);
   const body = await request.text();
   const valid = tweetnacl.sign.detached.verify(
     new TextEncoder().encode(timestamp + body),
