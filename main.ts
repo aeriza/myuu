@@ -4,7 +4,7 @@ import { InteractionResponseType } from "discord_api_types";
 async function handler(request: Request): Promise<Response> {
   const invalidResponse = new Response("Invalid Request", { status: 401 });
   const headers = ["X-Signature-Ed25519", "X-Signature-Timestamp"];
-  if (request.method != "POST" && !headers.every(request.headers.has)) return invalidResponse;
+  if (request.method != "POST" && !headers.every((ctx) => request.headers.has(ctx))) return invalidResponse;
     
   const [signature, timestamp] = headers.map((ctx) => request.headers.get(ctx) as string);
   const body = await request.text();
