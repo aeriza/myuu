@@ -1,6 +1,8 @@
 import { parse } from "https://deno.land/std@0.204.0/flags/mod.ts";
+import { stringify } from "https://deno.land/std/@0.204.0/dotenv/mod.ts";
 
 const args = parse(Deno.args);
+if (!("check-only" in args)) buildEnv(["PROJECT"]);
 
 /** Key yang diawali dengan `$` akan diganti dengan tipe environment*/
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
