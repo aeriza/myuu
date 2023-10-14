@@ -1,5 +1,5 @@
 import { parse } from "https://deno.land/std@0.204.0/flags/mod.ts";
-import { stringify } from "https://deno.land/std/@0.204.0/dotenv/mod.ts";
+import { stringify } from "https://deno.land/std@0.204.0/dotenv/mod.ts";
 import { exportVariable } from "npm:@actions/core@1.10.1";
 
 const args = parse(Deno.args);
