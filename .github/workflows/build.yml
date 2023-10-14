@@ -28,4 +28,6 @@ jobs:
         run: deno cache $ENTRYPOINT
 
       - name: Run type check
-        run: deno check $ENTRYPOINT
+        run: |
+          deno run --allow-read --allow-write --check build.ts --check-only
+          deno check $ENTRYPOINT
