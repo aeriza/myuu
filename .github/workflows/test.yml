@@ -36,7 +36,7 @@ jobs:
 
       - name: Run build
         run: |
-          deno run --allow-env --check build.ts
+          deno run --allow-env --allow-read --allow-write --check build.ts
 
       - name: Deploy to Deno Deploy
         run: |
