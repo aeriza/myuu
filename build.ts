@@ -3,10 +3,10 @@ import { stringify } from "https://deno.land/std@0.204.0/dotenv/mod.ts";
 import { exportVariable } from "npm:@actions/core@1.10.1";
 
 const args = parse(Deno.args);
-if (!("check-only" in args)) buildEnv(["$PUBLIC_KEY", "PROJECT"], true);
+if (!("check-only" in args)) buildEnv(["$PUBLIC_KEY", "$PROJECT"], true);
 
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
-  const environment = (Deno.env.get("GH_REF") as string == Deno.env.get("GH_DEFAULT_BRANCH")) ? "PROD" : "PREVIEW";
+  const environment = (Deno.env.get("GH_REF")!.split("/").at(-1) == Deno.env.get("GH_DEFAULT_BRANCH")) ? "PROD" : "PREVIEW";
   const env: { [K: string]: string } = {};
   
   for (const rawKey of keys) {
