@@ -1,4 +1,4 @@
-name: test
+name: deploy
 
 on: [push, pull_request]
 
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     env:
       BUILD_FILE: build.ts
