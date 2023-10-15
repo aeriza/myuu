@@ -34,7 +34,7 @@ jobs:
         run: deno cache $BUILD_FILE $ENTRYPOINT
 
       - name: Run build
-        run: deno run --allow-env --allow-read --allow-write --check $BUILD_FILE
+        run: deno run --allow-env --allow-read --allow-write --allow-run --check $BUILD_FILE
 
       - name: Deploy to Deno Deploy
         run: |
