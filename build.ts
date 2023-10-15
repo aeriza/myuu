@@ -11,17 +11,47 @@ if (!("check-only" in args)) {
   await Deno.writeTextFile(".env", stringify(deploymentEnv));
 }
 
-const interactions: Array<{ path: string, data: Interaction }> = [];
+type InteractionData = { path: string, data: Interaction };
+
+const interactions: InteractionData[] = [];
 for await (const file of Deno.readDir("./interactions")) {
   const path: string = `./interactions/${file.name}`;
   const data: Interaction = await import(path);
   interactions.push({ path, data });
 }
 
-// TODO: setup manifest.gen.ts file
-const raw = `
-${interactions.map((ctx: { path: string, data: Interaction }, index: number) => `import $${index} from "${ctx.path}";`).join("\n")}
-`
+const output = `
+${interactions.map((ctx: InteractionData, index: number) => `import * as $${index} from "${ctx.path}";`).join("\n")}
+
+export const interactions = [
+  ${interactions.map((ctx: InteractionData, index: number) => `$${index}`).join(", ")}
+]
+`;
+
+const proc = await Deno.Command(Deno.execPath(), {
+  args: [
+    "fmt",
+    "-"
+  ],
+  stdin: "piped",
+  stdout: "piped",
+  stderr: "null"
+}).spawn();
+
+const raw = new ReadableStream({
+  type: "bytes",
+  start(cont: ReadableByteStreamController): void {
+    cont.enqueue(new TextEncoder().encode(output));
+    cont.close();
+  }
+});
+raw.pipeTo(proc.stdin);
+
+const { stdout } = await proc.output();
+const decoded = new TextDecoder().decode(stdout);
+
+console.log(decoded);
+await Deno.writeTextFile("manifest.gen.ts", decoded);
 
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
   const environment = (Deno.env.get("GH_REF")!.split("/").at(-1) == Deno.env.get("GH_DEFAULT_BRANCH")) ? "PROD" : "PREVIEW";
