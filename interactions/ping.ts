@@ -1,5 +1,6 @@
 import {
   type APIPingInteraction,
+  InteractionResponseType,
   InteractionType
 } from "discord_api_types";
 
