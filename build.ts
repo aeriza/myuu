@@ -28,7 +28,7 @@ export const interactions = [
 ]
 `;
 
-const proc = await Deno.Command(Deno.execPath(), {
+const proc = new Deno.Command(Deno.execPath(), {
   args: [
     "fmt",
     "-"
