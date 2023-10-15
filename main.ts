@@ -1,10 +1,20 @@
 import tweetnacl from "npm:tweetnacl@1.0.3";
 import { loadSync } from "dotenv";
-import { InteractionResponseType } from "discord_api_types";
+import {
+  type APIInteraction,
+  APIVersion as version,
+  InteractionResponseType,
+} from "discord_api_types";
+import type { Interaction } from "./types.ts";
+import { REST } from "@discordjs/rest";
 
 loadSync({ export: true });
 
-async function handler(request: Request): Promise<Response> {
+const rest = new REST({
+  version
+}).setToken(Deno.env.get("TOKEN") as string);
+
+async function handler(request: Request): Promise<any> {
   const invalidResponse = new Response("Invalid Request", { status: 401 });
   const headers = ["X-Signature-Ed25519", "X-Signature-Timestamp"];
   if (request.method != "POST" && !headers.every((ctx) => request.headers.has(ctx))) return invalidResponse;
@@ -19,9 +29,19 @@ async function handler(request: Request): Promise<Response> {
 
   if (!valid) return invalidResponse;
 
-  return new Response(
-    JSON.stringify({ type: InteractionResponseType.Pong })
-  );
+  const _interaction: APIInteraction = JSON.parse(body);
+
+  switch(_interaction.type) {
+    case InteractionType.Ping:
+      return new Response(
+        JSON.stringify({ type: InteractionResponseType.Pong })
+      );
+      break;
+    default:
+      const interaction = interactions.find((i: Interaction) => i.type == _interaction.type);
+      if (interaction) return await interaction.execute(interaction, { rest });
+      break;
+  }
 }
 
 Deno.serve(handler);
