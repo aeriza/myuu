@@ -1,5 +1,6 @@
 {
   "imports": {
+    "@discordjs/collection": "npm:@discordjs/collection@1.5.3",
     "@discordjs/rest": "npm:@discordjs/rest@2.0.1",
     "discord_api_types": "https://deno.land/x/discord_api_types@0.37.60/v10.ts",
     "dotenv": "https://deno.land/std@0.204.0/dotenv/mod.ts"
