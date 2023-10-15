@@ -11,7 +11,7 @@ if (!("check-only" in args)) {
   await Deno.writeTextFile(".env", stringify(deploymentEnv));
 }
 
-const interactions: { path: string, data: Interaction } = [];
+const interactions: Array<{ path: string, data: Interaction }> = [];
 for await (const file of Deno.readDir("./interactions")) {
   const path: string = `./interactions/${file.name}`;
   const data: Interaction = await import(path);
@@ -20,7 +20,7 @@ for await (const file of Deno.readDir("./interactions")) {
 
 // TODO: setup manifest.gen.ts file
 const raw = `
-${interactions.map((ctx, index) => `import $${index} from "${ctx.path}";`).join("\n")}
+${interactions.map((ctx: Array<{ path: string, data: Interaction }>, index: number) => `import $${index} from "${ctx.path}";`).join("\n")}
 `
 
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
