@@ -20,7 +20,7 @@ for await (const file of Deno.readDir("./interactions")) {
 
 // TODO: setup manifest.gen.ts file
 const raw = `
-${interactions.map((ctx: Array<{ path: string, data: Interaction }>, index: number) => `import $${index} from "${ctx.path}";`).join("\n")}
+${interactions.map((ctx: { path: string, data: Interaction }, index: number) => `import $${index} from "${ctx.path}";`).join("\n")}
 `
 
 export function buildEnv(keys: string[], exportValue?: boolean): Record<string, string> {
