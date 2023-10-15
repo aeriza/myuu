@@ -9,9 +9,11 @@ import {
 import type { REST } from "@discordjs/rest";
 
 export type Command =
-  | { data: RESTPostAPIChatInputApplicationCommandsJSONBody, execute(interaction: APIChatInputApplicationCommandInteraction, options: Partial<RunOptions>): Promise<any> }
-  | { data: Partial<RESTPostAPIContextMenuApplicationCommandsJSONBody> & { type: ApplicationCommandType.Message }, execute(interaction: APIMessageApplicationCommandInteraction, options: Partial<RunOptions>): Promise<any> }
-  | { data: Partial<RESTPostAPIContextMenuApplicationCommandsJSONBody> & { type: ApplicationCommandType.User }, execute(interaction: APIUserApplicationCommandInteraction, options: Partial<RunOptions>): Promise<any> }
+  | { data: RESTPostAPIChatInputApplicationCommandsJSONBody, execute(interaction: APIChatInputApplicationCommandInteraction, options: Partial<RunOptions>): RunResult }
+  | { data: Partial<RESTPostAPIContextMenuApplicationCommandsJSONBody> & { type: ApplicationCommandType.Message }, execute(interaction: APIMessageApplicationCommandInteraction, options: Partial<RunOptions>): RunResult }
+  | { data: Partial<RESTPostAPIContextMenuApplicationCommandsJSONBody> & { type: ApplicationCommandType.User }, execute(interaction: APIUserApplicationCommandInteraction, options: Partial<RunOptions>): RunResult }
+
+export type RunResult = Promise<Response> | Response;
 
 export interface RunOptions {
   rest: REST;
